@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GradeBook+ - Student Grade Tracking Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>GradeBook+</h1>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" data-page="home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-page="upload">Upload Grades</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-page="dashboard">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-page="badges">Badges</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="hero-section">
+                <h2>Welcome to GradeBook+</h2>
+                <p>Track your academic performance, set goals, and unlock achievements!</p>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="card quick-stats">
+                    <h3>Quick Overview</h3>
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <span class="stat-label">Total Subjects</span>
+                            <span class="stat-value" id="total-subjects">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Average Grade</span>
+                            <span class="stat-value" id="average-grade">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Badges Earned</span>
+                            <span class="stat-value" id="badges-count">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card upcoming-exams">
+                    <h3>Upcoming Exams</h3>
+                    <div id="exam-list">
+                        <p class="no-data">No upcoming exams scheduled</p>
+                    </div>
+                </div>
+
+                <div class="card recent-activity">
+                    <h3>Recent Activity</h3>
+                    <div id="activity-feed">
+                        <p class="no-data">No recent activity</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Grades Page -->
+        <div id="upload" class="page">
+            <div class="page-header">
+                <h2>Upload Grades</h2>
+                <p>Add your grades by uploading a CSV file or entering them manually</p>
+            </div>
+
+            <div class="upload-grid">
+                <div class="card upload-section">
+                    <h3>Upload CSV File</h3>
+                    <div class="upload-area" id="upload-area">
+                        <div class="upload-icon">📄</div>
+                        <p>Drag and drop your CSV file here or click to browse</p>
+                        <input type="file" id="csv-file" accept=".csv" hidden>
+                        <button class="btn btn-primary" onclick="document.getElementById('csv-file').click()">
+                            Choose File
+                        </button>
+                    </div>
+                    <div class="upload-info">
+                        <p><strong>CSV Format:</strong> Subject, Grade, Date (YYYY-MM-DD), Exam Type</p>
+                        <p><strong>Example:</strong> Mathematics, 85, 2024-03-15, Midterm</p>
+                    </div>
+                </div>
+
+                <div class="card manual-entry">
+                    <h3>Manual Entry</h3>
+                    <form id="grade-form">
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="grade">Grade (%)</label>
+                            <input type="number" id="grade" min="0" max="100" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exam-type">Exam Type</label>
+                            <select id="exam-type" required>
+                                <option value="">Select type</option>
+                                <option value="Quiz">Quiz</option>
+                                <option value="Midterm">Midterm</option>
+                                <option value="Final">Final</option>
+                                <option value="Assignment">Assignment</option>
+                                <option value="Project">Project</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Grade</button>
+                    </form>
+                </div>
+
+                <div class="card target-calculator">
+                    <h3>Target Calculator</h3>
+                    <form id="target-form">
+                        <div class="form-group">
+                            <label for="target-grade">Target Average (%)</label>
+                            <input type="number" id="target-grade" min="0" max="100" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="remaining-exams">Remaining Exams</label>
+                            <input type="number" id="remaining-exams" min="1" required>
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Calculate</button>
+                    </form>
+                    <div id="target-result" class="target-result"></div>
+                </div>
+
+                <div class="card exam-countdown">
+                    <h3>Add Exam Date</h3>
+                    <form id="exam-form">
+                        <div class="form-group">
+                            <label for="exam-subject">Subject</label>
+                            <input type="text" id="exam-subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exam-date">Exam Date</label>
+                            <input type="date" id="exam-date" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Exam</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard" class="page">
+            <div class="page-header">
+                <h2>Performance Dashboard</h2>
+                <p>Visualize your academic progress and identify areas for improvement</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card chart-container">
+                    <h3>Grades by Subject</h3>
+                    <canvas id="bar-chart" width="400" height="300"></canvas>
+                </div>
+
+                <div class="card chart-container">
+                    <h3>Progress Over Time</h3>
+                    <canvas id="line-chart" width="400" height="300"></canvas>
+                </div>
+
+                <div class="card performance-stats">
+                    <h3>Performance Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="avg-grade">0%</div>
+                            <div class="stat-label">Average Grade</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="highest-grade">0%</div>
+                            <div class="stat-label">Highest Grade</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="lowest-grade">0%</div>
+                            <div class="stat-label">Lowest Grade</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="total-exams">0</div>
+                            <div class="stat-label">Total Exams</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card study-tips">
+                    <h3>Study Tips</h3>
+                    <div id="tips-container">
+                        <p class="no-data">Add some grades to get personalized study tips!</p>
+                    </div>
+                </div>
+
+                <div class="card exam-countdowns">
+                    <h3>Exam Countdowns</h3>
+                    <div id="countdown-container">
+                        <p class="no-data">No upcoming exams</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Badges Page -->
+        <div id="badges" class="page">
+            <div class="page-header">
+                <h2>Achievement Badges</h2>
+                <p>Unlock badges by reaching milestones in your academic journey</p>
+            </div>
+
+            <div class="badges-grid" id="badges-container">
+                <!-- Badges will be dynamically generated -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Success/Error Messages -->
+    <div id="message-container" class="message-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
